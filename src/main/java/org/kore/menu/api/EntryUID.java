@@ -19,18 +19,17 @@
 package org.kore.menu.api;
 
 /**
- * Navigation
+ * Enty Unique Identifier
  *
- * Entry-Point for the navigation/menus. This interface has to be
- * implemented/loaded in the client application of this API
  *
- * @author koni
+ * @author Konrad Renner
  */
-public interface Menu {
+public interface EntryUID {
 
-    EntryGroup getMainGroup(Namespace namespace);
-
-    EntryGroup getGroup(Namespace namespace, EntryUID uid);
-
-    Entry getEntry(Namespace namespace, EntryUID uid);
+    /**
+     * Returns a domain specific String-representation of the UID
+     *
+     * @return String
+     */
+    String asString();
 }

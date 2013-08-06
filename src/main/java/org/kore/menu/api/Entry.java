@@ -23,4 +23,6 @@ package org.kore.menu.api;
  * @author koni
  */
 public interface Entry {
+
+    EntryUID getUID();
 }

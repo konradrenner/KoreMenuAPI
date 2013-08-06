@@ -18,9 +18,15 @@
  */
 package org.kore.menu.api;
 
+import java.util.Set;
+
 /**
  *
  * @author koni
  */
-public interface EntryGroup {
+public interface EntryGroup extends Entry {
+
+    Set<Entry> getEntries();
+
+    Entry getEntry(EntryUID uid);
 }

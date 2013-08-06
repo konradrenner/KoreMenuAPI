@@ -21,9 +21,12 @@ package org.kore.menu.api;
 /**
  * Namespace.
  *
+ * A namespace speficies a special part of your application (e.g. a part of your
+ * application)
  *
- *
- * @author koni
+ * @author Konrad Renner
  */
-public class Namespace {
+public interface Namespace {
+
+    String getName();
 }
