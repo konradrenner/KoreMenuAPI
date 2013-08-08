@@ -16,42 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package org.kore.menu.api;
-
-import java.util.Set;
+package org.kore.menu.api.security;
 
 /**
+ * Represents a security context. Authorizations can be bound to security
+ * contexts
  *
  * @author Konrad Renner
  */
-public interface EntryGroup extends Entry {
+public interface SecurityContext {
 
-    boolean isMainGroup();
-
-    /**
-     * Returns all Entries form this group
-     *
-     * @return Set<Entry>
-     */
-    Set<Entry> getEntries();
-
-    /**
-     * Returns the entries of this group as group (creates a new copy of this
-     * group)
-     *
-     *
-     * @return EntryGroup
-     */
-    @Override
-    EntryGroup getChildren();
-
-
-    /**
-     * Searches for an entry in this group an all children from the groups
-     * entries. Returns a NullEntry if no matching Entry is found
-     *
-     * @param uid
-     * @return Entry
-     */
-    Entry getEntry(EntryUID uid);
+    SecurityUID getUID();
 }

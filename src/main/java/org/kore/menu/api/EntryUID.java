@@ -31,5 +31,5 @@ public interface EntryUID {
      *
      * @return String
      */
-    String asString();
+    String getIdentifierString();
 }

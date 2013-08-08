@@ -16,42 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package org.kore.menu.api;
-
-import java.util.Set;
+package org.kore.menu.api.security;
 
 /**
+ * Represents a unique ID for security characteristics
  *
  * @author Konrad Renner
  */
-public interface EntryGroup extends Entry {
-
-    boolean isMainGroup();
+public interface SecurityUID {
 
     /**
-     * Returns all Entries form this group
+     * Returns a String representation of UID
      *
-     * @return Set<Entry>
+     * @return String
      */
-    Set<Entry> getEntries();
-
-    /**
-     * Returns the entries of this group as group (creates a new copy of this
-     * group)
-     *
-     *
-     * @return EntryGroup
-     */
-    @Override
-    EntryGroup getChildren();
-
-
-    /**
-     * Searches for an entry in this group an all children from the groups
-     * entries. Returns a NullEntry if no matching Entry is found
-     *
-     * @param uid
-     * @return Entry
-     */
-    Entry getEntry(EntryUID uid);
+    String getIdentifierString();
 }

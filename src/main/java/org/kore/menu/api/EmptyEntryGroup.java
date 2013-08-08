@@ -18,40 +18,27 @@
  */
 package org.kore.menu.api;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
  *
  * @author Konrad Renner
  */
-public interface EntryGroup extends Entry {
+public class EmptyEntryGroup extends NullEntry implements EntryGroup {
 
-    boolean isMainGroup();
-
-    /**
-     * Returns all Entries form this group
-     *
-     * @return Set<Entry>
-     */
-    Set<Entry> getEntries();
-
-    /**
-     * Returns the entries of this group as group (creates a new copy of this
-     * group)
-     *
-     *
-     * @return EntryGroup
-     */
     @Override
-    EntryGroup getChildren();
+    public boolean isMainGroup() {
+        return false;
+    }
 
+    @Override
+    public Set<Entry> getEntries() {
+        return Collections.emptySet();
+    }
 
-    /**
-     * Searches for an entry in this group an all children from the groups
-     * entries. Returns a NullEntry if no matching Entry is found
-     *
-     * @param uid
-     * @return Entry
-     */
-    Entry getEntry(EntryUID uid);
+    @Override
+    public Entry getEntry(EntryUID uid) {
+        return new NullEntry();
+    }
 }

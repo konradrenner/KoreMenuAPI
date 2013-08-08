@@ -16,42 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package org.kore.menu.api;
+package org.kore.menu.api.security;
 
 import java.util.Set;
 
 /**
+ * Represents a single authorization
  *
  * @author Konrad Renner
  */
-public interface EntryGroup extends Entry {
+public interface Authorization {
 
-    boolean isMainGroup();
-
-    /**
-     * Returns all Entries form this group
-     *
-     * @return Set<Entry>
-     */
-    Set<Entry> getEntries();
+    SecurityUID getUID();
 
     /**
-     * Returns the entries of this group as group (creates a new copy of this
-     * group)
+     * Returns a set of SecurityContexts which are mapped to the authorization
      *
-     *
-     * @return EntryGroup
+     * @return Set<SecurityContext>
      */
-    @Override
-    EntryGroup getChildren();
-
-
-    /**
-     * Searches for an entry in this group an all children from the groups
-     * entries. Returns a NullEntry if no matching Entry is found
-     *
-     * @param uid
-     * @return Entry
-     */
-    Entry getEntry(EntryUID uid);
+    Set<SecurityContext> getConnectedContexts();
 }

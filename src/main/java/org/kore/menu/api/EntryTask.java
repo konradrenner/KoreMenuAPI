@@ -18,40 +18,24 @@
  */
 package org.kore.menu.api;
 
-import java.util.Set;
+import org.kore.menu.api.security.SecurityContext;
+import org.kore.menu.api.security.SecurityInspector;
 
 /**
+ * Represtens a task which is mapped to an entry. A task can be e.g. 'print' or
+ * the starting point for a faces flow
  *
  * @author Konrad Renner
  */
-public interface EntryGroup extends Entry {
-
-    boolean isMainGroup();
+public interface EntryTask extends Entry {
 
     /**
-     * Returns all Entries form this group
+     * Executes the Task, throws an SecurityExecption if the task can not be
+     * started because of security issues
      *
-     * @return Set<Entry>
+     * @param context
+     * @param inspector
+     * @throws SecurityException
      */
-    Set<Entry> getEntries();
-
-    /**
-     * Returns the entries of this group as group (creates a new copy of this
-     * group)
-     *
-     *
-     * @return EntryGroup
-     */
-    @Override
-    EntryGroup getChildren();
-
-
-    /**
-     * Searches for an entry in this group an all children from the groups
-     * entries. Returns a NullEntry if no matching Entry is found
-     *
-     * @param uid
-     * @return Entry
-     */
-    Entry getEntry(EntryUID uid);
+    void execute(SecurityContext context, SecurityInspector inspector) throws SecurityException;
 }

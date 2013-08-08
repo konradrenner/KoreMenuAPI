@@ -16,42 +16,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package org.kore.menu.api;
+package org.kore.menu.api.security;
 
 import java.util.Set;
+import org.kore.menu.api.Entry;
 
 /**
+ * Inspects an entry if required authorizations are available. The
+ * SecurityInspector should be initialized with the current user, so he can decide if the required authoriziations for the actual
+ * context and user are there.
  *
  * @author Konrad Renner
  */
-public interface EntryGroup extends Entry {
-
-    boolean isMainGroup();
+public interface SecurityInspector {
 
     /**
-     * Returns all Entries form this group
+     * Checks if the user (the SecurityInspector should be intialized with an
+     * user) has the required authorizations for the given context. If not, a SecurityException is thrown
      *
-     * @return Set<Entry>
+     * @param context
+     * @param entry
+     * @throws SecurityException
      */
-    Set<Entry> getEntries();
+    void inspect(SecurityContext context, Entry entry) throws SecurityException;
 
     /**
-     * Returns the entries of this group as group (creates a new copy of this
-     * group)
+     * Returns all occured security violations during inspection
      *
-     *
-     * @return EntryGroup
+     * @return Set<SecurityViolation>
      */
-    @Override
-    EntryGroup getChildren();
-
-
-    /**
-     * Searches for an entry in this group an all children from the groups
-     * entries. Returns a NullEntry if no matching Entry is found
-     *
-     * @param uid
-     * @return Entry
-     */
-    Entry getEntry(EntryUID uid);
+    Set<SecurityViolation> getViolations();
 }
