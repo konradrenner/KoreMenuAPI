@@ -30,7 +30,9 @@ public interface Authorization {
     SecurityUID getUID();
 
     /**
-     * Returns a set of SecurityContexts which are mapped to the authorization
+     * Returns a set of SecurityContexts which are mapped to the authorization.
+     * This means, that e.g. an Entry which is mapped to a SecurityContext
+     * 'READ' is only displyable in this context
      *
      * @return Set<SecurityContext>
      */

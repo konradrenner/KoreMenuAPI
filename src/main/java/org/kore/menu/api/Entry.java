@@ -24,32 +24,28 @@ import org.kore.menu.api.security.SecurityContext;
 import org.kore.menu.api.security.SecurityInspector;
 
 /**
+ * Represents an entry of the menu. Each Entry must be comparable (comparison
+ * should be done with the EntryUID).
  *
  * @author koni
  */
-public interface Entry {
+public interface Entry extends Comparable<Entry> {
 
     EntryUID getUID();
 
     Set<Authorization> getRequiredAuthorization();
 
-    /**
-     * Returns true if the Entry is in the current security context displayable
-     *
-     * @param context
-     * @return boolean
-     */
-    boolean isDisplayable(SecurityContext context);
 
     /**
      * The given SecurityInspector checks if a user has all required
-     * authorizations for this entry. This method returns true if everthing is
-     * OK
+     * authorizations for this entry. The SecurityInspector also checks if the
+     * SecurityContext is OK. This method returns true if everthing is OK
      *
+     * @param context
      * @param inspector
      * @return boolean
      */
-    boolean controlAuthorizations(SecurityInspector inspector);
+    boolean controlAuthorizations(SecurityInspector inspector, SecurityContext context);
 
     /**
      * Gets the parent entry. This is an entry which is a level higher than this

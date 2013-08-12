@@ -37,21 +37,36 @@ public class NullEntry implements Entry {
             public String getIdentifierString() {
                 return "";
             }
+
+            @Override
+            public int compareTo(EntryUID o) {
+                if (o.equals(this)) {
+                    return 0;
+                }
+                return getSortingKey().compareTo(o.getSortingKey());
+            }
+
+            @Override
+            public String getSortingKey() {
+                return "";
+            }
         };
     }
+
+    @Override
+    public int compareTo(Entry o) {
+        return getUID().compareTo(o.getUID());
+    }
+
 
     @Override
     public Set<Authorization> getRequiredAuthorization() {
         return Collections.emptySet();
     }
 
-    @Override
-    public boolean isDisplayable(SecurityContext context) {
-        return false;
-    }
 
     @Override
-    public boolean controlAuthorizations(SecurityInspector inspector) {
+    public boolean controlAuthorizations(SecurityInspector inspector, SecurityContext context) {
         return false;
     }
 

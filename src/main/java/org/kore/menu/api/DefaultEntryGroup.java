@@ -18,7 +18,11 @@
  */
 package org.kore.menu.api;
 
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import org.kore.menu.api.security.Authorization;
 import org.kore.menu.api.security.SecurityContext;
@@ -26,16 +30,17 @@ import org.kore.menu.api.security.SecurityInspector;
 import org.kore.menu.api.security.SecurityUID;
 
 /**
+ * Serializable default implementation of the interface EntryGroup
  *
  * @author Konrad Renner
  */
-public class DefaultEntryGroup implements EntryGroup {
+public class DefaultEntryGroup implements EntryGroup, Serializable {
 
-    final EntryUID uid;
-    final Map<EntryUID, Entry> entries;
-    final Map<SecurityUID, Authorization> auths;
-    final Entry parent;
-    final Map<EntryUID, EntryTask> tasks;
+    private final EntryUID uid;
+    private final Map<EntryUID, Entry> entries;
+    private final Map<SecurityUID, Authorization> auths;
+    private final Entry parent;
+    private final Map<EntryUID, EntryTask> tasks;
 
     //Construct with builder
     private DefaultEntryGroup(EntryUID uid, Map<EntryUID, Entry> entries, Map<SecurityUID, Authorization> auths, Entry parent, Map<EntryUID, EntryTask> tasks) {
@@ -46,56 +51,65 @@ public class DefaultEntryGroup implements EntryGroup {
         this.tasks = tasks;
     }
 
+    @Override
+    public int compareTo(Entry o) {
+        return this.uid.compareTo(o.getUID());
+    }
 
 
     @Override
     public boolean isMainGroup() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.parent.equals(new NullEntry());
     }
 
     @Override
     public Set<Entry> getEntries() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new HashSet<Entry>(this.entries.values());
     }
 
     @Override
     public Entry getEntry(EntryUID uid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.entries.get(uid) == null) {
+            return new NullEntry();
+        }
+
+        return this.entries.get(uid);
     }
 
     @Override
     public EntryUID getUID() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.uid;
     }
 
     @Override
     public Set<Authorization> getRequiredAuthorization() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new HashSet<Authorization>(this.auths.values());
     }
 
     @Override
-    public boolean isDisplayable(SecurityContext context) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean controlAuthorizations(SecurityInspector inspector) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean controlAuthorizations(SecurityInspector inspector, SecurityContext ctx) {
+        try {
+            inspector.inspect(ctx, parent);
+            return true;
+        } catch (SecurityException e) {
+            return false;
+        }
     }
 
     @Override
     public Entry getParent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.parent;
     }
 
     @Override
     public EntryGroup getChildren() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DefaultEntryGroup copy = new DefaultEntryGroup(uid, entries, auths, parent, tasks);
+        return copy;
     }
 
     @Override
     public Set<EntryTask> getMappedTasks() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new HashSet<EntryTask>(this.tasks.values());
     }
 
     @Override
@@ -104,6 +118,42 @@ public class DefaultEntryGroup implements EntryGroup {
     }
 
     public static class Builder {
-        //TODO
+        //Required properties
+
+        private final EntryUID uid;
+        private final Map<EntryUID, Entry> entries;
+        //optional properties
+        private Map<SecurityUID, Authorization> auths;
+        private Entry parent;
+        private Map<EntryUID, EntryTask> tasks;
+
+        public Builder(final EntryUID uid, final Map<EntryUID, Entry> entries) {
+            this.uid = Objects.requireNonNull(uid);
+            this.entries = Objects.requireNonNull(entries);
+
+            this.auths = Collections.emptyMap();
+            this.parent = new NullEntry();
+            this.tasks = Collections.emptyMap();
+        }
+        
+        public Builder addRequiredAuthorizations(final Map<SecurityUID, Authorization> auth) {
+            this.auths = Objects.requireNonNull(auth);
+            return this;
+        }
+        
+        public Builder addParent(final Entry parent) {
+            this.parent = Objects.requireNonNull(parent);
+            return this;
+        }
+        
+        public Builder addTasks(final Map<EntryUID, EntryTask> task) {
+            this.tasks = Objects.requireNonNull(task);
+            return this;
+        }
+
+        public DefaultEntryGroup build() {
+
+            return new DefaultEntryGroup(uid, entries, auths, parent, tasks);
+        }
     }
 }
