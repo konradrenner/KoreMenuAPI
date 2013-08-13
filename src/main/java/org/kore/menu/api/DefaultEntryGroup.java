@@ -19,6 +19,8 @@
 package org.kore.menu.api;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -41,14 +43,23 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
     private final Map<SecurityUID, Authorization> auths;
     private final Entry parent;
     private final Map<EntryUID, EntryTask> tasks;
+    private final NavigationPath path;
+    private final String displayKey;
 
     //Construct with builder
-    private DefaultEntryGroup(EntryUID uid, Map<EntryUID, Entry> entries, Map<SecurityUID, Authorization> auths, Entry parent, Map<EntryUID, EntryTask> tasks) {
+    private DefaultEntryGroup(EntryUID uid, Map<EntryUID, Entry> entries, Map<SecurityUID, Authorization> auths, Entry parent, Map<EntryUID, EntryTask> tasks, NavigationPath pat, String dkey) {
         this.uid = uid;
         this.entries = entries;
         this.auths = auths;
         this.parent = parent;
         this.tasks = tasks;
+        this.path = pat;
+        this.displayKey = dkey;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.GROUP;
     }
 
     @Override
@@ -77,6 +88,61 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
     }
 
     @Override
+    public Entry searchForEntryDeeply(EntryUID uid) {
+        return searchForEntryDeeply(uid, this);
+    }
+
+    Entry searchForEntryDeeply(EntryUID uid, EntryGroup group) {
+        Entry entry = group.getEntry(uid);
+
+        //If there is no entry found in this level for the UID, we have to search the child entries
+        if (Type.NULL.equals(entry.getType())) {
+            Set<Entry> entriesGroup = group.getEntries();
+
+            for (Entry etr : entriesGroup) {
+                //if the entry is a group, we have to search
+                if (Type.GROUP.equals(etr.getType())) {
+                    entry = ((EntryGroup) etr).searchForEntryDeeply(uid);
+
+                    //if the type is not a NULL Type we have the one we have searched for
+                    if (!Type.NULL.equals(entry.getType())) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return entry;
+    }
+
+
+    @Override
+    public Collection<Entry> getAllofType(Type typ) {
+        return searchGroupForTypes(typ, this);
+    }
+
+    Collection<Entry> searchGroupForTypes(Type typ, EntryGroup group) {
+        if (Type.NULL.equals(typ)) {
+            throw new IllegalArgumentException("It is not possible to search for NULL entires");
+        }
+
+        ArrayList<Entry> ret = new ArrayList<Entry>();
+
+        for (Entry entry : getEntries()) {
+            if (typ.equals(entry.getType())) {
+                ret.add(entry);
+            }
+
+            if (Type.GROUP.equals(entry.getType())) {
+                ret.addAll(searchGroupForTypes(typ, (EntryGroup) entry));
+            }
+        }
+
+        return ret;
+    }
+
+
+    @Override
     public EntryUID getUID() {
         return this.uid;
     }
@@ -103,7 +169,7 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
 
     @Override
     public EntryGroup getChildren() {
-        DefaultEntryGroup copy = new DefaultEntryGroup(uid, entries, auths, parent, tasks);
+        DefaultEntryGroup copy = new DefaultEntryGroup(uid, entries, auths, parent, tasks, path, displayKey);
         return copy;
     }
 
@@ -114,8 +180,27 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
 
     @Override
     public boolean executeTask(EntryUID taskid, SecurityContext context, SecurityInspector inspector) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EntryTask task = this.tasks.get(taskid);
+        if (task == null) {
+            return false;
+        }
+        
+        if (task.controlAuthorizations(inspector, context)) {
+            task.execute(context, inspector);
+        }
+        return false;
     }
+
+    @Override
+    public String getDisplayKey() {
+        return this.displayKey;
+    }
+
+    @Override
+    public NavigationPath getNavigationPath() {
+        return this.path;
+    }
+
 
     public static class Builder {
         //Required properties
@@ -126,6 +211,8 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
         private Map<SecurityUID, Authorization> auths;
         private Entry parent;
         private Map<EntryUID, EntryTask> tasks;
+        private NavigationPath path;
+        private String displayKey;
 
         public Builder(final EntryUID uid, final Map<EntryUID, Entry> entries) {
             this.uid = Objects.requireNonNull(uid);
@@ -150,10 +237,20 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
             this.tasks = Objects.requireNonNull(task);
             return this;
         }
+        
+        public Builder addDisplayKey(final String key) {
+            this.displayKey = Objects.requireNonNull(key);
+            return this;
+        }
+        
+        public Builder addNavigationPath(final NavigationPath pat) {
+            this.path = Objects.requireNonNull(pat);
+            return this;
+        }
 
         public DefaultEntryGroup build() {
 
-            return new DefaultEntryGroup(uid, entries, auths, parent, tasks);
+            return new DefaultEntryGroup(uid, entries, auths, parent, tasks, path, displayKey);
         }
     }
 }

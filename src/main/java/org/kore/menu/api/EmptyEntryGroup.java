@@ -18,6 +18,7 @@
  */
 package org.kore.menu.api;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
@@ -34,11 +35,21 @@ public class EmptyEntryGroup extends NullEntry implements EntryGroup {
 
     @Override
     public Set<Entry> getEntries() {
-        return Collections.emptySet();
+        return Collections.EMPTY_SET;
     }
 
     @Override
     public Entry getEntry(EntryUID uid) {
+        return new NullEntry();
+    }
+
+    @Override
+    public Collection<Entry> getAllofType(Type typ) {
+        return Collections.EMPTY_SET;
+    }
+
+    @Override
+    public Entry searchForEntryDeeply(EntryUID uid) {
         return new NullEntry();
     }
 }

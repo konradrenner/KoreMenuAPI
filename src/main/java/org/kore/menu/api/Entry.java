@@ -31,6 +31,19 @@ import org.kore.menu.api.security.SecurityInspector;
  */
 public interface Entry extends Comparable<Entry> {
 
+    enum Type {
+
+        ENTRY, GROUP, TASK, NULL;
+    }
+
+    /**
+     * Returns the type of the entry. If the Entry is a NullEntry or a
+     * NullEntryGroup Type.NULL will be returned
+     *
+     * @return Type
+     */
+    Type getType();
+
     EntryUID getUID();
 
     Set<Authorization> getRequiredAuthorization();
@@ -76,4 +89,18 @@ public interface Entry extends Comparable<Entry> {
      * @return boolean
      */
     boolean executeTask(EntryUID taskid, SecurityContext context, SecurityInspector inspector);
+
+    /**
+     * Returns a String which can be used for presentation on a GUI
+     *
+     * @return String
+     */
+    String getDisplayKey();
+
+    /**
+     * Returns the path of the Entry
+     *
+     * @return NavigationPath
+     */
+    NavigationPath getNavigationPath();
 }

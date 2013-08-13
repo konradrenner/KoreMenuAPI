@@ -19,30 +19,32 @@
 package org.kore.menu.api;
 
 /**
- * Entry Unique Identifier. Each EntryUID must be compareable.
+ * With the help of the NavigationRule, a GUI can decide which element must be
+ * displayed
  *
  * @author Konrad Renner
  */
-public interface EntryUID extends Comparable<EntryUID> {
+public interface NavigationPath {
 
     /**
-     * Returns the domain specific namespace
-     *
-     * @return Namespace
-     */
-    Namespace getNamespace();
-
-    /**
-     * Returns a domain specific String-representation of the UID
+     * Returns a domain specific String representation of this rule (e.g. a link
+     * to a webpage)
      *
      * @return String
      */
-    String getIdentifierString();
+    String asString();
 
     /**
-     * Returns a String with which help UIDs are sorted.
+     * Returns the path, if an error occured
      *
-     * @return String
+     * @return NavigationPath
      */
-    String getSortingKey();
+    NavigationPath getErrorPath();
+
+    /**
+     * Returns the entry, which is mapped to this path
+     *
+     * @return Entry
+     */
+    Entry getMappedEntry();
 }

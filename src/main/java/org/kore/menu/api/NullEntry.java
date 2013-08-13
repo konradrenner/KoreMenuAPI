@@ -50,8 +50,24 @@ public class NullEntry implements Entry {
             public String getSortingKey() {
                 return "";
             }
+
+            @Override
+            public Namespace getNamespace() {
+                return new Namespace() {
+                    @Override
+                    public String getName() {
+                        return "";
+                    }
+                };
+            }
         };
     }
+
+    @Override
+    public Type getType() {
+        return Type.NULL;
+    }
+
 
     @Override
     public int compareTo(Entry o) {
@@ -89,5 +105,15 @@ public class NullEntry implements Entry {
     @Override
     public boolean executeTask(EntryUID taskid, SecurityContext context, SecurityInspector inspector) {
         return true;
+    }
+
+    @Override
+    public String getDisplayKey() {
+        return "";
+    }
+
+    @Override
+    public NavigationPath getNavigationPath() {
+        return new NullPath();
     }
 }

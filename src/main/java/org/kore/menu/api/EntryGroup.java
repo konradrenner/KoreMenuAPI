@@ -18,6 +18,7 @@
  */
 package org.kore.menu.api;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -47,11 +48,30 @@ public interface EntryGroup extends Entry {
 
 
     /**
-     * Searches for an entry in this group an all children from the groups
-     * entries. Returns a NullEntry if no matching Entry is found
+     * Searches for an entry in this group, no subgroups will be searched in.
+     * Returns a NullEntry if no matching Entry is found
      *
      * @param uid
      * @return Entry
      */
     Entry getEntry(EntryUID uid);
+
+    /**
+     * Searches for an entry in this group and all children from the groups
+     * entries. Returns a NullEntry if no matching Entry is found
+     *
+     * @param uid
+     * @return Entry
+     */
+    Entry searchForEntryDeeply(EntryUID uid);
+
+    /**
+     * Searches for all entries of this group (and subgroups) where the given
+     * type matches.
+      *
+     * @param typ
+     * @return Entry
+     * @throws IllegalArgumentException - if the type is a NULL type
+     */
+    Collection<Entry> getAllofType(Type typ);
 }

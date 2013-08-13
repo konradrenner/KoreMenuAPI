@@ -19,30 +19,23 @@
 package org.kore.menu.api;
 
 /**
- * Entry Unique Identifier. Each EntryUID must be compareable.
  *
  * @author Konrad Renner
  */
-public interface EntryUID extends Comparable<EntryUID> {
+public class NullPath implements NavigationPath {
 
-    /**
-     * Returns the domain specific namespace
-     *
-     * @return Namespace
-     */
-    Namespace getNamespace();
+    @Override
+    public String asString() {
+        return "";
+    }
 
-    /**
-     * Returns a domain specific String-representation of the UID
-     *
-     * @return String
-     */
-    String getIdentifierString();
+    @Override
+    public NavigationPath getErrorPath() {
+        return new NullPath();
+    }
 
-    /**
-     * Returns a String with which help UIDs are sorted.
-     *
-     * @return String
-     */
-    String getSortingKey();
+    @Override
+    public Entry getMappedEntry() {
+        return new NullEntry();
+    }
 }
