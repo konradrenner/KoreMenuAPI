@@ -62,11 +62,11 @@ public interface Entry extends Comparable<Entry> {
 
     /**
      * Gets the parent entry. This is an entry which is a level higher than this
-     * Entry. Returns an NullEntry if this Entry has no Parent
+     * Entry. Returns an EntryUID of an NullEntry if it has no parent
      *
-     * @return Entry
+     * @return EntryUID
      */
-    Entry getParent();
+    EntryUID getParent();
 
     /**
      * Gets the children entries of this entry. Returns an EmptyEntryGroup, if

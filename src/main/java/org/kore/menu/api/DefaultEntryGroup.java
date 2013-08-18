@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 import org.kore.menu.api.security.Authorization;
 import org.kore.menu.api.security.SecurityContext;
 import org.kore.menu.api.security.SecurityInspector;
@@ -41,13 +42,13 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
     private final EntryUID uid;
     private final Map<EntryUID, Entry> entries;
     private final Map<SecurityUID, Authorization> auths;
-    private final Entry parent;
+    private final EntryUID parent;
     private final Map<EntryUID, EntryTask> tasks;
     private final NavigationPath path;
     private final String displayKey;
 
     //Construct with builder
-    private DefaultEntryGroup(EntryUID uid, Map<EntryUID, Entry> entries, Map<SecurityUID, Authorization> auths, Entry parent, Map<EntryUID, EntryTask> tasks, NavigationPath pat, String dkey) {
+    private DefaultEntryGroup(EntryUID uid, Map<EntryUID, Entry> entries, Map<SecurityUID, Authorization> auths, EntryUID parent, Map<EntryUID, EntryTask> tasks, NavigationPath pat, String dkey) {
         this.uid = uid;
         this.entries = entries;
         this.auths = auths;
@@ -75,7 +76,7 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
 
     @Override
     public Set<Entry> getEntries() {
-        return new HashSet<Entry>(this.entries.values());
+        return new TreeSet<Entry>(this.entries.values());
     }
 
     @Override
@@ -155,7 +156,7 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
     @Override
     public boolean controlAuthorizations(SecurityInspector inspector, SecurityContext ctx) {
         try {
-            inspector.inspect(ctx, parent);
+            inspector.inspect(ctx, this);
             return true;
         } catch (SecurityException e) {
             return false;
@@ -163,7 +164,7 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
     }
 
     @Override
-    public Entry getParent() {
+    public EntryUID getParent() {
         return this.parent;
     }
 
@@ -209,7 +210,7 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
         private final Map<EntryUID, Entry> entries;
         //optional properties
         private Map<SecurityUID, Authorization> auths;
-        private Entry parent;
+        private EntryUID parent;
         private Map<EntryUID, EntryTask> tasks;
         private NavigationPath path;
         private String displayKey;
@@ -219,7 +220,7 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
             this.entries = Objects.requireNonNull(entries);
 
             this.auths = Collections.emptyMap();
-            this.parent = new NullEntry();
+            this.parent = new NullEntry().getUID();
             this.tasks = Collections.emptyMap();
         }
         
@@ -228,7 +229,7 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
             return this;
         }
         
-        public Builder addParent(final Entry parent) {
+        public Builder addParent(final EntryUID parent) {
             this.parent = Objects.requireNonNull(parent);
             return this;
         }

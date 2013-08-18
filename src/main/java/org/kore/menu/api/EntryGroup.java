@@ -30,7 +30,7 @@ public interface EntryGroup extends Entry {
     boolean isMainGroup();
 
     /**
-     * Returns all Entries form this group
+     * Returns all Entries form this group sorted
      *
      * @return Set<Entry>
      */

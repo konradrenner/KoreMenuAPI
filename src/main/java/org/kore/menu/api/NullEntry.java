@@ -87,8 +87,8 @@ public class NullEntry implements Entry {
     }
 
     @Override
-    public Entry getParent() {
-        return new NullEntry();
+    public EntryUID getParent() {
+        return getUID();
     }
 
     @Override
