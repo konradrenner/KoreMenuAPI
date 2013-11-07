@@ -59,4 +59,11 @@ public interface Menu {
      * @return Entry
      */
     Entry getEntry(Namespace namespace, EntryUID uid);
+
+    /**
+     * Returns the namespace of the current application
+     *
+     * @return Namespace
+     */
+    Namespace getCurrentNamespace();
 }
