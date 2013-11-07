@@ -18,33 +18,29 @@
  */
 package org.kore.menu.api;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 /**
- * Entry Unique Identifier. Each EntryUID must be compareable.
  *
  * @author Konrad Renner
  */
-public interface EntryUID extends Comparable<EntryUID> {
+public abstract class AbstractEntryUIDFactory implements EntryUIDFactory, Serializable {
 
-    public static String DEFAULT_SORTING = "";
+    private final Namespace namespace;
 
-    /**
-     * Returns the domain specific namespace
-     *
-     * @return Namespace
-     */
-    Namespace getNamespace();
+    public AbstractEntryUIDFactory(final Namespace namespace) {
+        Objects.requireNonNull(namespace);
+        this.namespace = namespace;
+    }
 
-    /**
-     * Returns a domain specific String-representation of the UID
-     *
-     * @return String
-     */
-    String getIdentifierString();
+    @Override
+    public EntryUID createUID(String id, String sortigKey) {
+        return createUID(namespace, id, sortigKey);
+    }
 
-    /**
-     * Returns a String with which help UIDs are sorted.
-     *
-     * @return String
-     */
-    String getSortingKey();
+    @Override
+    public EntryUID createUID(String id) {
+        return createUID(namespace, id, EntryUID.DEFAULT_SORTING);
+    }
 }
