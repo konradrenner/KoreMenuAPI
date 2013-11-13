@@ -61,6 +61,38 @@ public interface Menu {
     Entry getEntry(Namespace namespace, EntryUID uid);
 
     /**
+     * Loads the toplevel EntryGroup for the current namespace. Return an
+     * EmptyEntryGroup if no matching group is found
+     *
+     * @param namespace
+     * @return EntryGroup
+     */
+    EntryGroup getMainGroup();
+
+    /**
+     * Loads an EntryGroup
+     *
+     * Searches rekursive threw all EntryGroups of the current namespace. Return
+     * an EmptyEntryGroup if no matching group is found
+     *
+     * @see EmptyEntryGroup
+     * @param namespace
+     * @param uid
+     * @return EntryGroup
+     */
+    EntryGroup getGroup(EntryUID uid);
+
+    /**
+     * Loads an entry, searches rekursive threw all EntryGroups of the current
+     * namespace. Return an NullEntry if nothing is found
+     *
+     * @param namespace
+     * @param uid
+     * @return Entry
+     */
+    Entry getEntry(EntryUID uid);
+
+    /**
      * Returns the namespace of the current application
      *
      * @return Namespace
