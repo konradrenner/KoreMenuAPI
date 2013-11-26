@@ -81,7 +81,7 @@ public interface Entry extends Comparable<Entry> {
 
     /**
      * Executes a mapped task, return true if everthing is OK (task started and
-     * if the task runs not asynchron true if the task was completed)
+     * if the task runs not asynchron, true if the task was completed)
      *
      * @param taskid
      * @param context

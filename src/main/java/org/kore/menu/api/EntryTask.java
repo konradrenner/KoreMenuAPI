@@ -38,4 +38,16 @@ public interface EntryTask extends Entry {
      * @throws SecurityException
      */
     void execute(SecurityContext context, SecurityInspector inspector) throws SecurityException;
+
+    /**
+     * Executes a mapped sub-task, return true if everthing is OK (task started
+     * and if the task runs not asynchron, true if the task was completed)
+     *
+     * @param taskid
+     * @param context
+     * @param inspector
+     * @return boolean
+     */
+    @Override
+    boolean executeTask(EntryUID taskid, SecurityContext context, SecurityInspector inspector);
 }
