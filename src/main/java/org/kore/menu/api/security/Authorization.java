@@ -18,6 +18,7 @@
  */
 package org.kore.menu.api.security;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -25,7 +26,7 @@ import java.util.Set;
  *
  * @author Konrad Renner
  */
-public interface Authorization {
+public interface Authorization extends Serializable {
 
     SecurityUID getUID();
 

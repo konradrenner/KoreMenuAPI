@@ -34,6 +34,16 @@ public class NullEntry implements Entry {
     public EntryUID getUID() {
         return new EntryUID() {
             @Override
+            public int hashCode() {
+                return 42;
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return this.getClass().equals(obj.getClass());
+            }
+
+            @Override
             public String getIdentifierString() {
                 return "";
             }
@@ -114,6 +124,6 @@ public class NullEntry implements Entry {
 
     @Override
     public NavigationPath getNavigationPath() {
-        return new NullPath();
+        return new NullNavigationPath();
     }
 }

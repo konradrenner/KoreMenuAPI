@@ -18,6 +18,7 @@
  */
 package org.kore.menu.api.security;
 
+import java.io.Serializable;
 import java.util.Set;
 import org.kore.menu.api.Entry;
 
@@ -28,7 +29,7 @@ import org.kore.menu.api.Entry;
  *
  * @author Konrad Renner
  */
-public interface SecurityInspector {
+public interface SecurityInspector extends Serializable {
 
     /**
      * Checks if the user (the SecurityInspector should be intialized with an

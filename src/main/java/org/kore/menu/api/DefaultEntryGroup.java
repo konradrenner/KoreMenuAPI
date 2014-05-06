@@ -18,7 +18,6 @@
  */
 package org.kore.menu.api;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +36,7 @@ import org.kore.menu.api.security.SecurityUID;
  *
  * @author Konrad Renner
  */
-public class DefaultEntryGroup implements EntryGroup, Serializable {
+public class DefaultEntryGroup implements EntryGroup{
 
     private final EntryUID uid;
     private final Map<EntryUID, Entry> entries;
@@ -64,14 +63,40 @@ public class DefaultEntryGroup implements EntryGroup, Serializable {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 41 * hash + (this.uid != null ? this.uid.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DefaultEntryGroup other = (DefaultEntryGroup) obj;
+        if (this.uid != other.uid && (this.uid == null || !this.uid.equals(other.uid))) {
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
     public int compareTo(Entry o) {
+        if (this.equals(o)) {
+            return 0;
+        }
         return this.uid.compareTo(o.getUID());
     }
 
 
     @Override
     public boolean isMainGroup() {
-        return this.parent.equals(new NullEntry());
+        return this.parent.equals(new NullEntry().getUID());
     }
 
     @Override

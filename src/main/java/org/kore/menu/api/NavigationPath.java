@@ -18,13 +18,15 @@
  */
 package org.kore.menu.api;
 
+import java.io.Serializable;
+
 /**
  * With the help of the NavigationRule, a GUI can decide which element must be
  * displayed
  *
  * @author Konrad Renner
  */
-public interface NavigationPath {
+public interface NavigationPath extends Serializable {
 
     /**
      * Returns a domain specific String representation of this rule (e.g. a link

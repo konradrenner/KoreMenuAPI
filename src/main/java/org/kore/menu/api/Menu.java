@@ -18,6 +18,8 @@
  */
 package org.kore.menu.api;
 
+import java.io.Serializable;
+
 /**
  * Navigation
  *
@@ -26,7 +28,7 @@ package org.kore.menu.api;
  *
  * @author koni
  */
-public interface Menu {
+public interface Menu extends Serializable {
 
     /**
      * Loads the toplevel EntryGroup for the given namespace. Return an

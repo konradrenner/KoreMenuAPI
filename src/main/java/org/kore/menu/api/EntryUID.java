@@ -18,12 +18,14 @@
  */
 package org.kore.menu.api;
 
+import java.io.Serializable;
+
 /**
  * Entry Unique Identifier. Each EntryUID must be compareable.
  *
  * @author Konrad Renner
  */
-public interface EntryUID extends Comparable<EntryUID> {
+public interface EntryUID extends Comparable<EntryUID>, Serializable {
 
     public static String DEFAULT_SORTING = "";
 

@@ -18,13 +18,15 @@
  */
 package org.kore.menu.api.security;
 
+import java.io.Serializable;
+
 /**
  * Represents a security context. Authorizations can be bound to security
  * contexts
  *
  * @author Konrad Renner
  */
-public interface SecurityContext {
+public interface SecurityContext extends Serializable {
 
     SecurityUID getUID();
 }

@@ -18,6 +18,8 @@
  */
 package org.kore.menu.api;
 
+import java.io.Serializable;
+
 /**
  * Namespace.
  *
@@ -26,7 +28,7 @@ package org.kore.menu.api;
  *
  * @author Konrad Renner
  */
-public interface Namespace {
+public interface Namespace extends Serializable {
 
     String getName();
 }

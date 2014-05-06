@@ -18,6 +18,7 @@
  */
 package org.kore.menu.api;
 
+import java.io.Serializable;
 import java.util.Set;
 import org.kore.menu.api.security.Authorization;
 import org.kore.menu.api.security.SecurityContext;
@@ -29,7 +30,7 @@ import org.kore.menu.api.security.SecurityInspector;
  *
  * @author koni
  */
-public interface Entry extends Comparable<Entry> {
+public interface Entry extends Comparable<Entry>, Serializable {
 
     enum Type {
 

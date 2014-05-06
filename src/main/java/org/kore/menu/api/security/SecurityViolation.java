@@ -18,12 +18,14 @@
  */
 package org.kore.menu.api.security;
 
+import java.io.Serializable;
+
 /**
  * Represents a security violation
  *
  * @author Konrad Renner
  */
-public interface SecurityViolation {
+public interface SecurityViolation extends Serializable {
 
     /**
      * Returns a code for further usage (e.g. display the user a message from a

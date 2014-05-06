@@ -18,12 +18,14 @@
  */
 package org.kore.menu.api.security;
 
+import java.io.Serializable;
+
 /**
  * Represents a unique ID for security characteristics
  *
  * @author Konrad Renner
  */
-public interface SecurityUID {
+public interface SecurityUID extends Serializable {
 
     /**
      * Returns a String representation of UID
