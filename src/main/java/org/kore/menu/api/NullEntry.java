@@ -81,6 +81,18 @@ public class NullEntry implements Entry {
         return Type.NULL;
     }
 
+    @Override
+    public int hashCode() {
+        return 42;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        return this.getClass().equals(obj.getClass());
+    }
 
     @Override
     public int compareTo(Entry o) {
